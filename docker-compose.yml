@@ -1,0 +1,17 @@
+services:
+  go-vow:
+    image: golang:alpine
+    container_name: gockerfile
+    working_dir: /app
+    environment:
+      - GOPATH=/app/.go
+      - CGO_ENABLED=0
+      - GOOS=linux
+      - GOARCH=amd64
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+      go mod init gockerfile || true
+      gofmt -w *.go && go mod tidy && go mod download && go build -ldflags='-w -s' -o build/gf && build/gf
+      "
